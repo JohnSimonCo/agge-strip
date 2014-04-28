@@ -24,7 +24,7 @@ $.extend(Catchable.prototype, Entity.prototype, {
 	die: function(level) {
 		Entity.prototype.die.call(this, level);
 		for(var i = 0; i < Math.PI * 2; i += Math.PI / 20) {
-			level.addEntity(new Particle(this.x, this.y, 5, 5, this.game, 'particle.png', Math.cos(i) * 10, Math.sin(i) * 10));
+			level.addEntity(new Particle(this.x, this.y, 5, 5, this.game, 'res/particle.png', Math.cos(i) * 10, Math.sin(i) * 10));
 		}
 	}
 });

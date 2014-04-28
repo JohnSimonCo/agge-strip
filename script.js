@@ -6,12 +6,12 @@ $(document).ready(function() {
 			yOffset: 50,
 			width: 150,
 			height: 50,
-			sprite: 'paddle.gif'
+			sprite: 'res/paddle.gif'
 		},
 		catchable: {
 			width: 50,
 			height: 50,
-			sprite: 'dick.gif'
+			sprite: 'res/dick.gif'
 		} 
 
 	}, container);	
