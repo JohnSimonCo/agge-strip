@@ -1,11 +1,12 @@
-function Player(x, y, w, h, game, sprite) {
-	Entity.call(this, x, y, w, h, game, sprite, 'player');
+function Player() {
+	var options = game.options.player;
+	Entity.call(this, 0, game.level.height - options.yOffset, options, 'player');
 }
 
 $.extend(Player.prototype, Entity.prototype, {
-	update: function(level, delta) {
-		this.x = this.game.mouse.x;
-		this.fitToBoundsX(level);
+	update: function() {
+		this.x = game.mouse.x;
+		this.fitToBoundsX(game.level);
 		this.renderer.updatePosition();
 	}
 });

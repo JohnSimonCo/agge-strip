@@ -12,55 +12,43 @@ function Game(options) {
 
 	var inputManager = new InputManager({
 		mousemove: {
-			event: 'move'
+			event: 'mousemove'
 		}
 	});
 
 	var self = this;
 	this.mouse = {};
-	inputManager.on('move', function(data) {
+	inputManager.on('mousemove', function(data) {
 		if(data.target == self.hoverTarget) {
 			self.mouse.x = data.x;
 			self.mouse.y = data.y;
 		}
 	});
-
-	this.pseudo = new PseudoRandom(0.008, 1.05);
-
-	var playerOptions = options.player, width = this.$container.width(), height = this.$container.height(),
-	player = new Player(width / 2, height - playerOptions.yOffset,
-		playerOptions.width, playerOptions.height, this, playerOptions.sprite);
-	
-	this.level = new Level(width, height, player);
 }
 Game.prototype = {
-	update: function(delta, time) {
-		if(Math.random() < this.pseudo.get()) {
-			this.pseudo.succes();
-			this.level.addEntity(this._createCathable());
-		} else this.pseudo.fail();
-		
+	init: function() {
+		this.level = new Level(this.$container.width(), this.$container.height());
+		this.level.init();
+
+		this.stageManager = new StageManager(this.options.stages);
+	},
+	update: function(delta, timeStamp) {
+		this.deltaT = delta;
+		this.time = timeStamp;
 		this.level.update(delta);
 	},
 	caught: function() {
-		this.$score.text((this.score += 10));
+		this.score += 10;
+		this.stageManager.updateStage(this.score);
+		this.$score.text(this.score);
 	},
 	missed: function() {
-		this.$score.text((this.score = 0));
+		this.score = 0;
+		this.stageManager.updateStage(this.score);
+		this.$score.text(this.score);
 	},
-	_createCathable: function() {
-		var catchableOptions = this.options.catchable;
-		return new Catchable(randomInt(this.level.width), -catchableOptions.width / 2,
-			catchableOptions.width, catchableOptions.height, this, catchableOptions.sprite);
+	getSpeed: function() {
+		return Math.randomInt(this.stageManager.getOption('maxSpeed'),
+					   this.stageManager.getOption('minSpeed'));
 	}
 };
-/*
-{
-	player: {
-		sprite: 'bla bla',
-		width: 1
-		height: 1,
-		y: 10
-	}
-}
-*/

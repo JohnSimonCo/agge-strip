@@ -1,8 +1,7 @@
-function HtmlRenderer(entity, $container, entityClass) {
+function HtmlRenderer(entity, entityClass) {
 	this.entity = entity;
-	this.$container = $container;
 	this.element = document.createElement('img');
-	$container.append(this.element);
+	game.$container.append(this.element);
 
 	this.element.src = entity.sprite;
 	this.$element = $(this.element)

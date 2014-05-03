@@ -1,24 +1,20 @@
-function Entity(x, y, w, h, game, sprite, customClass) {
+function Entity(x, y, options, customClass) {
 	this.x = x;
 	this.y = y;
-	this.w = w;
-	this.h = h;
-	this.game = game;
-	this.sprite = sprite;
+	this.w = options.width;
+	this.h = options.height;
+	this.sprite = options.sprite;
 
-	this.renderer = new HtmlRenderer(this, game.$container, customClass);
+	this.renderer = new HtmlRenderer(this, customClass);
 }
 
 Entity.prototype = {
-	init: function(level) {
+	update: function() {
 
 	},
-	update: function(level, delta, time) {
-
-	},
-	move: function(xDiff, yDiff, delta) {
-		this.x += xDiff * delta;
-		this.y += yDiff * delta;
+	move: function(xDiff, yDiff) {
+		this.x += xDiff * game.deltaT;
+		this.y += yDiff * game.deltaT;
 
 		this.renderer.updatePosition();
 	},
@@ -26,12 +22,12 @@ Entity.prototype = {
 		var hw = this.w/2, hh = this.h/2;
 		return new Rect(this.x - hw, this.y - hh, this.x + hw, this.y + hh);
 	},
-	die: function(level) {
-		level.removeEntity(this);
+	die: function() {
+		game.level.removeEntity(this);
 		this.renderer.die();
 	},
-	fitToBoundsX: function(level) {
-		var xBoundsLeft = this.w / 2, xBoundsRight = level.width - this.w / 2;
+	fitToBoundsX: function() {
+		var xBoundsLeft = this.w / 2, xBoundsRight = game.level.width - this.w / 2;
 		if(this.x < xBoundsLeft) this.x = xBoundsLeft;
 		else if(this.x > xBoundsRight) this.x = xBoundsRight;
 	}

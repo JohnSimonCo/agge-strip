@@ -1,31 +1,27 @@
-function Catchable(x, y, w, h, game, sprite) {
-	Entity.call(this, x, y, w, h, game, sprite, 'catchable');
+function Catchable(x, speed) {
+	var options = game.options.catchable;
+	Entity.call(this, x, -options.height/2, options, 'catchable');
+	this.speed = speed;
+	this.fitToBoundsX();
 }
 $.extend(Catchable.prototype, Entity.prototype, {
-	init: function(level) {
-		this.fitToBoundsX(level);
+	update: function() {
+		this.move(0, this.speed);
 	},
-	update: function(level, delta) {
-		this.move(0, Catchable.speed, delta, level);
-	},
-	move: function(xDiff, yDiff, delta, level) {
-		Entity.prototype.move.call(this, xDiff, yDiff, delta);
-		if (level.player.getRekt().intersects(this.getRekt())) {
-			this.game.caught();
-			this.die(level);
-		} else if (this.outOfBounds(level)) {
-			this.game.missed();
-			this.die(level);
+	move: function(xDiff, yDiff) {
+		Entity.prototype.move.call(this, xDiff, yDiff);
+		if (game.level.player.getRekt().intersects(this.getRekt())) {
+			game.caught();
+			this.die();
+		} else if (this.outOfBounds()) {
+			game.missed();
+			this.die();
 		}
 	},
-	outOfBounds: function(level) {
-		return this.y > level.height - this.h / 2;
+	outOfBounds: function() {
+		return this.y > game.level.height - this.h / 2;
 	},
-	die: function(level) {
-		Entity.prototype.die.call(this, level);
-		for(var i = 0; i < Math.PI * 2; i += Math.PI / 20) {
-			level.addEntity(new Particle(this.x, this.y, 10, 10, this.game, 'res/spinning-dick.gif', Math.cos(i) * 10, Math.sin(i) * 10));
-		}
+	die: function() {
+		Entity.prototype.die.call(this);
 	}
 });
-Catchable.speed = 20;

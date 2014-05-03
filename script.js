@@ -1,7 +1,6 @@
-var game;
 $(document).ready(function() {
 	var container = document.querySelector('#game-container');
-	game = new Game({
+	window.game = new Game({
 		player: {
 			yOffset: 50,
 			width: 150,
@@ -12,9 +11,35 @@ $(document).ready(function() {
 			width: 50,
 			height: 50,
 			sprite: 'res/dick.gif'
-		} 
+		},
+		stages: [
+			{
+				model: 'aggedressed.jpg',
+				maxSpeed: 10,
+				minSpeed: 20
+			},
+			{
+				score: 50,
+				model: 'aggenoshirt.jpg',
+				maxSpeed: 15,
+				minSpeed: 25
+			},
+			{
+				score: 100,
+				model: 'aggeunderpants.jpg',
+				maxSpeed: 20,
+				minSpeed: 30
+			},
+			{
+				score: 150,
+				model: 'aggenude.jpg',
+				maxSpeed: 25,
+				minSpeed: 35
+			}
+		]
 
-	}, container);	
+	}, container);
+	game.init();
 
 	requestAnimationFrame(update);
 });
@@ -25,8 +50,4 @@ function update(time) {
 
 	lastTime = time;
 	requestAnimationFrame(update);
-}
-
-function randomInt(max) {
-	return Math.floor(Math.random() * max);
 }
